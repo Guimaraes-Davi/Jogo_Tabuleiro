@@ -15,6 +15,8 @@ BLACK = (0, 0, 0)
 GREEN = (0, 255, 0)
 RED = (255, 0, 0)
 BLUE = (0, 0, 255)
+YELLOW = (255, 255, 0)
+DARK_GRAY = (50, 50, 50)
 
 # Configurações do Tabuleiro
 TOTAL_CASAS = 15
@@ -67,11 +69,24 @@ def mostrar_informacoes(jogador):
     screen.blit(divida_text, (50, 100))
     screen.blit(faturamento_text, (50, 150))
 
-# Função para pop-up de eventos
+# Função para pop-up de eventos no canto superior direito
 def pop_up(text):
-    font = pygame.font.Font(None, 48)
-    pop_text = font.render(text, True, RED)
-    screen.blit(pop_text, (SCREEN_WIDTH // 2 - 100, SCREEN_HEIGHT // 2 - 50))
+    font = pygame.font.Font(None, 26)
+    
+    # Definir tamanho e posição do pop-up
+    pop_width, pop_height = 300, 100
+    x = SCREEN_WIDTH - pop_width - 20  # 20 pixels de margem do lado direito
+    y = 20  # 20 pixels de margem do topo
+
+    # Desenhar o retângulo do pop-up
+    pygame.draw.rect(screen, YELLOW, (x, y, pop_width, pop_height))
+    pygame.draw.rect(screen, DARK_GRAY, (x, y, pop_width, pop_height), 3)  # Borda escura
+
+    # Renderizar o texto centralizado no pop-up
+    pop_text = font.render(text, True, BLACK)
+    text_rect = pop_text.get_rect(center=(x + pop_width // 2, y + pop_height // 2))
+    screen.blit(pop_text, text_rect)
+
     pygame.display.update()
     pygame.time.delay(2000)  # Exibe o pop-up por 2 segundos
 
@@ -80,13 +95,13 @@ def desafio_financeiro(jogador):
     chance = random.randint(1, 3)
     if chance == 1:
         jogador.faturamento += 200
-        pop_up("Você recebeu um bônus financeiro! +200")
+        pop_up("Você recebeu um bônus! +200")
     elif chance == 2:
         jogador.dividas += 100
-        pop_up("Você teve um gasto inesperado! +100 em dívidas")
+        pop_up("Gasto inesperado! +100 em dívidas")
     else:
         jogador.renda += 150
-        pop_up("Você fez um investimento! +150 de renda")
+        pop_up("Investimento feito! +150 de renda")
 
 # Loop principal do jogo
 jogador = Jogador()
